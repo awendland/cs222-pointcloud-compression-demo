@@ -29,6 +29,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     var detectionOverlayLayer: CALayer?
     var detectedFaceRectangleShapeLayer: CAShapeLayer?
     var detectedFaceLandmarksShapeLayer: CAShapeLayer?
+    @IBOutlet weak var infoTextView: UITextView!
     
     // Vision requests
     private var detectionRequests: [VNDetectFaceRectanglesRequest]?
@@ -450,6 +451,15 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         self.updateLayerGeometry()
         
         CATransaction.commit()
+
+        // Count landmarks
+        self.infoTextView.layer.zPosition = 1
+        for faceObservation in faceObservations {
+            if let pointCount = faceObservation.landmarks?.allPoints?.pointCount {
+                self.infoTextView.text = "Points: " + String(pointCount)
+                print(pointCount)
+            }
+        }
     }
     
     // MARK: AVCaptureVideoDataOutputSampleBufferDelegate
